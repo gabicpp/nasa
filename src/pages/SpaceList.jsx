@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { fetchNasaByPeriod } from '../services/nasaApi'
+import SpaceCard from '../components/SpaceCard'
+import Loader from '../components/Loader'
 
 function SpaceList() {
   

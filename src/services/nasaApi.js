@@ -15,7 +15,7 @@ export async function fetchNasaByPeriod(startDate) {
   
   const start = new Date(startDate)
   const end = new Date(start)
-  end.setDate(start.getDate() + 30) 
+  end.setDate(start.getDate() + 1) 
   
   const formatDate = (d) => d.toISOString().split('T')[0]
   

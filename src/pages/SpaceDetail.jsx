@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { nasaMapper } from '../services/nasaApi'
+import Loader from '../components/Loader'
 
 function SpaceDetail() {
   const { id } = useParams() 
