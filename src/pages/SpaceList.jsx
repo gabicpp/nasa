@@ -1,86 +1,89 @@
-import { useState, useEffect } from 'react'
-import { fetchNasaByPeriod } from '../services/nasaApi'
-import SpaceCard from '../components/SpaceCard'
-import Loader from '../components/Loader'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function SpaceList() {
-  
+  // Define o dia 01/05/2026 como a data inicial padrão do calendário
   const [dataSelecionada, setDataSelecionada] = useState('2026-05-01')
-  const [items, setItems] = useState([])
-  const [filtroTexto, setFiltroTexto] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  
+  const navigate = useNavigate()
 
-
-  const itensFiltrados = items.filter(item => 
-    item.title.toLowerCase().includes(filtroTexto.toLowerCase())
-  )
-
-  useEffect(() => {
-    let cancelled = false
-
-    async function loadNasaCalendar() {
-      try {
-        setLoading(true)
-        setError(null)
-        
-        const data = await fetchNasaByPeriod(dataSelecionada)
-        if (!cancelled) setItems(data)
-      } catch (err) {
-        if (!cancelled) setError(err.message)
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    }
-
-    loadNasaCalendar()
-    return () => { cancelled = true }
-  }, [dataSelecionada]) 
+  const handleAvancar = () => {
+    
+    navigate(`/detalhe/${dataSelecionada}`)
+  }
 
   return (
-    <main style={{ padding: '2rem' }}>
-      <h2>Explorador Espacial</h2>
+    <main style={{ 
+      padding: '3rem 2rem', 
+      backgroundColor: '#0b132b', 
+      minHeight: '85vh', 
+      color: '#ffffff',
+      textAlign: 'center'
+    }}>
+     
+      <h2 style={{ color: '#48cae4', marginBottom: '1rem', fontSize: '2rem' }}>
+        Selecione uma data
+      </h2>
+      <p style={{ color: '#cbd5e1', marginBottom: '2rem', fontSize: '1.1rem' }}>
+        Escolha um dia do mês 05/2026
+      </p>
       
-      {}
-      <div style={{ background: '#eee', padding: '15px', borderRadius: '8px', margin: '1rem 0', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-        <div>
-          <label htmlFor="dateInput" style={{ fontWeight: 'bold', display: 'block' }}>1. Escolha uma data de partida:</label>
-          <input 
-            id="dateInput"
-            type="date" 
-            value={dataSelecionada} 
-            onChange={(e) => setDataSelecionada(e.target.value)}
-            style={{ padding: '8px', marginTop: '5px' }}
-          />
-        </div>
+      <div style={{ 
+        maxWidth: '400px', 
+        margin: '0 auto', 
+        backgroundColor: '#1c2541', 
+        padding: '30px', 
+        borderRadius: '12px',
+        border: '1px solid #3a506b',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
+      }}>
+        <label htmlFor="datePicker" style={{ display: 'block', fontWeight: 'bold', marginBottom: '15px', fontSize: '1.1rem' }}>
+          CALENDÁRIO
+        </label>
+        
+        <input 
+          id="datePicker"
+          type="date" 
+          value={dataSelecionada}
+          
+          min="2026-05-01"
+          max="2026-05-31"
+          onChange={(e) => setDataSelecionada(e.target.value)}
+          style={{ 
+            padding: '12px', 
+            fontSize: '1.1rem', 
+            borderRadius: '6px', 
+            border: '2px solid #3a506b',
+            backgroundColor: '#0b132b',
+            color: '#ffffff',
+            width: '100%',
+            textAlign: 'center',
+            marginBottom: '25px',
+            outline: 'none'
+          }}
+        />
 
-        {}
-        <div>
-          <label htmlFor="textInput" style={{ fontWeight: 'bold', display: 'block' }}>2. Filtrar resultados abaixo por título:</label>
-          <input 
-            id="textInput"
-            type="search" 
-            placeholder="Ex: Galaxy, Nebula..." 
-            value={filtroTexto}
-            onChange={(e) => setFiltroTexto(e.target.value)}
-            style={{ padding: '8px', marginTop: '5px', width: '250px' }}
-          />
-        </div>
+        <button 
+          onClick={handleAvancar}
+          style={{
+            width: '100%',
+            padding: '14px',
+            backgroundColor: '#fc3d21',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '1.1rem',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(252, 61, 33, 0.4)',
+            transition: 'background 0.2s'
+          }}
+          onMouseOver={(e) => e.target.style.backgroundColor = '#e0321a'}
+          onMouseOut={(e) => e.target.style.backgroundColor = '#fc3d21'}
+        >
+          Clique para ver a imagem do dia
+        </button>
       </div>
-
-      {loading && <Loader message={`Sintonizando histórico a partir de ${dataSelecionada}...`} />}
-      {error && <p role="alert" style={{ color: 'red' }}>⚠️ {error}</p>}
-
-      {!loading && !error && (
-        <>
-          <h3>Imagens Disponíveis nesse período:</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px', marginTop: '1rem' }}>
-            {itensFiltrados.map(item => (
-              <SpaceCard key={item.id} {...item} />
-            ))}
-          </div>
-        </>
-      )}
     </main>
   )
 }

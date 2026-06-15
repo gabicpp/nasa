@@ -1,25 +1,20 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import Home from './pages/Home'
-import SpaceList from './pages/SpaceList'
-import SpaceDetail from './pages/SpaceDetail'
-import NotFound from './pages/NotFound'
+import Header from './components/Header.jsx'
+import Home from './pages/Home.jsx'
+import SpaceList from './pages/SpaceList.jsx'
+import SpaceDetail from './pages/SpaceDetail.jsx'
 
 function App() {
   return (
     <BrowserRouter>
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#f9f9f9', fontFamily: 'sans-serif' }}>
-        <Header />
-        <div style={{ flex: 1 }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/calendario" element={<SpaceList />} />
-            <Route path="/detalhe/:id" element={<SpaceDetail />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-        <Footer />
+      <div style={{ backgroundColor: '#0b132b', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+        <Header /> 
+        
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/calendario" element={<SpaceList />} />
+          <Route path="/detalhe/:id" element={<SpaceDetail />} />
+        </Routes>
       </div>
     </BrowserRouter>
   )

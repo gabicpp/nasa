@@ -1,26 +1,22 @@
 import { useParams, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { nasaMapper } from '../services/nasaApi'
-import Loader from '../components/Loader'
+import { fetchNasaByDate } from '../services/nasaApi'
 
 function SpaceDetail() {
-  const { id } = useParams() 
-  const [item, setItem] = useState(null)
+  const { id } = useParams()
+  const [spaceData, setSpaceData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     let cancelled = false
-    const API_KEY = 'DEMO_KEY'
 
-    async function loadSingleDay() {
+    async function loadDayInfo() {
       try {
         setLoading(true)
-        const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${id}`)
-        if (!response.ok) throw new Error('Não encontramos dados da NASA para este dia específico.')
-        
-        const rawData = await response.json()
-        if (!cancelled) setItem(nasaMapper(rawData))
+        setError(null)
+        const data = await fetchNasaByDate(id)
+        if (!cancelled) setSpaceData(data)
       } catch (err) {
         if (!cancelled) setError(err.message)
       } finally {
@@ -28,24 +24,69 @@ function SpaceDetail() {
       }
     }
 
-    loadSingleDay()
+    loadDayInfo()
     return () => { cancelled = true }
   }, [id])
 
-  if (loading) return <Loader message="Carregando imagem em alta resolução e dados oficiais..." />
-  if (error) return <div style={{ padding: '2rem' }}><p style={{ color: 'red' }}>{error}</p><Link to="/calendario">Voltar</Link></div>
+  if (loading) {
+    return (
+      <div style={{ padding: '4rem', textAlign: 'center', backgroundColor: '#0b132b', minHeight: '85vh', color: '#fff' }}>
+        <h2>Buscando registros na NASA...</h2>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: '4rem', textAlign: 'center', backgroundColor: '#0b132b', minHeight: '85vh', color: 'red' }}>
+        <h2> {error}</h2>
+        <Link to="/calendario" style={{ color: '#fff', marginTop: '1rem', display: 'block' }}>Voltar ao Calendário</Link>
+      </div>
+    )
+  }
 
   return (
-    <main style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <Link to="/calendario" style={{ color: '#0b3d91', fontWeight: 'bold' }}>← Voltar para a Galeria</Link>
-      
-      <h2 style={{ marginTop: '1rem' }}>{item.title}</h2>
-      <p style={{ color: '#666' }}><strong>Data de Publicação:</strong> {item.date} | © {item.copyright}</p>
-      
-      <img src={item.hdImageUrl} alt={item.title} style={{ width: '100%', borderRadius: '8px', margin: '1.5rem 0' }} />
-      
-      <h3>Descrição da Imagem (NASA):</h3>
-      <p style={{ lineHeight: '1.6', textAlign: 'justify', color: '#333' }}>{item.explanation}</p>
+    <main style={{ 
+      padding: '2rem', 
+      backgroundColor: '#0b132b', 
+      minHeight: '85vh', 
+      color: '#ffffff' 
+    }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+        <h2 style={{ color: '#48cae4', marginBottom: '0.5rem' }}>{spaceData.title}</h2>
+        <p style={{ color: '#cbd5e1', marginBottom: '1.5rem' }}>Data do Registro: {spaceData.date}</p>
+        
+        <img 
+          src={spaceData.imageUrl} 
+          alt={spaceData.title} 
+          style={{ 
+            width: '100%', 
+            maxHeight: '500px', 
+            objectFit: 'contain', 
+            borderRadius: '8px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+            marginBottom: '2rem'
+          }} 
+        />
+
+        <div style={{ textAlign: 'justify', backgroundColor: '#1c2541', padding: '20px', borderRadius: '8px', border: '1px solid #3a506b', marginBottom: '2.5rem' }}>
+          <h3 style={{ color: '#48cae4', marginBottom: '10px' }}>Descrição:</h3>
+          <p style={{ lineHeight: '1.6', color: '#e2e8f0' }}>{spaceData.explanation}</p>
+        </div>
+
+        <Link to="/calendario" style={{ 
+          display: 'inline-block', 
+          padding: '12px 24px', 
+          backgroundColor: '#3a506b', 
+          color: '#ffffff', 
+          textDecoration: 'none', 
+          borderRadius: '6px',
+          fontWeight: 'bold',
+          transition: 'background 0.2s'
+        }}>
+          Clique para uma nova busca
+        </Link>
+      </div>
     </main>
   )
 }

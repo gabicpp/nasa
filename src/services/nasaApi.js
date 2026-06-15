@@ -1,32 +1,23 @@
 export function nasaMapper(item) {
   return {
-    id: item.date, 
-    title: item.title || 'Objeto Celestial',
+    id: item.date,
+    title: item.title || 'Imagem Celestial',
     date: item.date,
-    imageUrl: item.media_type === 'image' ? item.url : 'https://placehold.co/600x400/0b3d91/ffffff?text=Video+Content',
-    hdImageUrl: item.hdurl || item.url,
+    imageUrl: item.media_type === 'image' ? item.url : 'https://placehold.co/600x400/0b3d91/ffffff?text=Conteudo+em+Video',
     explanation: item.explanation || 'Sem descrição disponível.',
-    copyright: item.copyright || 'Domínio Público'
+    copyright: item.copyright || 'NASA'
   }
 }
 
-export async function fetchNasaByPeriod(startDate) {
+export async function fetchNasaByDate(date) {
   const API_KEY = 'EmOsMh0yfzfQfEXtvETbThm2yqdyCWyo3jqHSJb6'
-  
-  const start = new Date(startDate)
-  const end = new Date(start)
-  end.setDate(start.getDate() + 1) 
-  
-  const formatDate = (d) => d.toISOString().split('T')[0]
-  
-  const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&start_date=${formatDate(start)}&end_date=${formatDate(end)}`
+  const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${date}`
 
   const response = await fetch(url)
   if (!response.ok) {
-    throw new Error('Erro ao conectar com a API da NASA para este período.')
+    throw new Error('Não foi possível carregar os dados desta data.')
   }
 
   const data = await response.json()
-  
-  return data.map(nasaMapper).reverse() 
+  return nasaMapper(data)
 }
