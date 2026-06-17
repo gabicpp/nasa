@@ -30,7 +30,7 @@ function SpaceDetail() {
 
   if (loading) {
     return (
-      <div style={{ padding: '4rem', textAlign: 'center', backgroundColor: '#0b132b', minHeight: '85vh', color: '#fff' }}>
+      <div style={{ padding: '4rem', textAlign: 'center', backgroundColor: '#2b0b27ff', minHeight: '85vh', color: '#ff6f' }}>
         <h2>Buscando registros na NASA...</h2>
       </div>
     )
@@ -48,7 +48,7 @@ function SpaceDetail() {
   return (
     <main style={{ 
       padding: '2rem', 
-      backgroundColor: '#0b132b', 
+      backgroundColor: '#2b0f0bff', 
       minHeight: '85vh', 
       color: '#ffffff' 
     }}>

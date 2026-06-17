@@ -2,8 +2,11 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 function SpaceList() {
-  // Define o dia 01/05/2026 como a data inicial padrão do calendário
-  const [dataSelecionada, setDataSelecionada] = useState('2026-05-01')
+  // Define a data atual do dia para iniciar padrão do calendário
+
+ const [dataSelecionada, setDataSelecionada] = useState(
+  new Date().toISOString().split('T')[0]
+)
   
   const navigate = useNavigate()
 
@@ -12,21 +15,49 @@ function SpaceList() {
     navigate(`/detalhe/${dataSelecionada}`)
   }
 
+  function subtract7Days(dateString) {
+    try {
+        if (typeof dateString !== "string") {
+            throw new Error("Input must be a string in YYYY-MM-DD format.");
+        }
+
+        // Validate basic format using regex
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+            throw new Error("Invalid date format. Expected YYYY-MM-DD.");
+        }
+
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            throw new Error("Invalid date value.");
+        }
+
+        // Subtract 7 days
+        date.setDate(date.getDate() - 30);
+
+        // Format back to YYYY-MM-DD
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    } catch (err) {
+        console.error(err.message);
+        return null;
+    }
+}
+
   return (
     <main style={{ 
       padding: '3rem 2rem', 
       backgroundColor: '#0b132b', 
       minHeight: '85vh', 
-      color: '#ffffff',
+      color: '#ffffffff',
       textAlign: 'center'
     }}>
      
       <h2 style={{ color: '#48cae4', marginBottom: '1rem', fontSize: '2rem' }}>
         Selecione uma data
       </h2>
-      <p style={{ color: '#cbd5e1', marginBottom: '2rem', fontSize: '1.1rem' }}>
-        Escolha um dia do mês 05/2026
-      </p>
       
       <div style={{ 
         maxWidth: '400px', 
@@ -46,8 +77,8 @@ function SpaceList() {
           type="date" 
           value={dataSelecionada}
           
-          min="2026-05-01"
-          max="2026-05-31"
+          min={subtract7Days(new Date().toISOString().split('T')[0])}
+          max = {new Date().toISOString().split('T')[0]}
           onChange={(e) => setDataSelecionada(e.target.value)}
           style={{ 
             padding: '12px', 
@@ -69,7 +100,7 @@ function SpaceList() {
             width: '100%',
             padding: '14px',
             backgroundColor: '#fc3d21',
-            color: '#ffffff',
+            color: '#ffffffff',
             border: 'none',
             borderRadius: '6px',
             fontSize: '1.1rem',
