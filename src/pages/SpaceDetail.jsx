@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { fetchNasaByDate } from '../services/nasaApi'
+import Loader from '../components/Loader.jsx'
 
 function SpaceDetail() {
   const { id } = useParams()
@@ -28,13 +29,21 @@ function SpaceDetail() {
     return () => { cancelled = true }
   }, [id])
 
-  if (loading) {
-    return (
-      <div style={{ padding: '4rem', textAlign: 'center', backgroundColor: '#2b0b27ff', minHeight: '85vh', color: '#ff6f' }}>
-        <h2>Buscando registros na NASA...</h2>
-      </div>
-    )
-  }
+if (loading) {
+  return (
+    <div style={{ 
+      padding: '4rem', 
+      textAlign: 'center', 
+      backgroundColor: '#0b132b', 
+      minHeight: '85vh',
+      display: 'flex',       
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <Loader message="Buscando registros na NASA..." />
+    </div>
+  )
+}
 
   if (error) {
     return (
@@ -48,7 +57,7 @@ function SpaceDetail() {
   return (
     <main style={{ 
       padding: '2rem', 
-      backgroundColor: '#2b0f0bff', 
+      backgroundColor: '#0b132b', 
       minHeight: '85vh', 
       color: '#ffffff' 
     }}>
