@@ -1,16 +1,44 @@
-# React + Vite
+# AstroCalendário - NASA APOD Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Projeto desenvolvido em React utilizando a API NASA APOD (Astronomy Picture of the Day), permitindo visualizar imagens astronômicas da NASA por data dos últimos 30 dias.
 
-Currently, two official plugins are available:
+## Integrantes
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Gabriela Castro Pereira
+- Leandra Ireti Aparecida Alves
 
-## React Compiler
+## API Utilizada
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- NASA APOD
+- https://api.nasa.gov/
 
-## Expanding the ESLint configuration
+## Instalação
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Clone o repositório:
+
+git clone <LINK_DO_REPOSITORIO>
+
+Acesse a pasta do projeto:
+
+cd <NOME_DO_PROJETO>
+
+Instale as dependências:
+
+npm install
+npm install react-router-dom
+
+Execute o projeto:
+
+npm run dev
+
+
+## Funcionalidades
+
+- Navegação entre páginas utilizando React Router.
+- Rota dinâmica para exibir detalhes da imagem selecionada.
+- Página de erro 404 para rotas inválidas.
+- Calendário para busca de imagens por data.
+- Filtro local de atalhos de datas.
+- Componentes reutilizáveis (Header, Footer, Loader e SpaceTag).
+- Tratamento de carregamento e erros da API.
+- Consumo da API NASA APOD com Fetch API.
